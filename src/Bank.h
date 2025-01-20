@@ -11,8 +11,8 @@ class Bank
 
     public:
     Bank(); 
-    void addAccount(const BankAccount&);
-    int getAccountNumbers() const;
+    void addAccount(const BankAccount& account);
+    std::vector<int> getAccountNumbers() const;
     void getAccountBalances() const;
     int getRandAccountNumber() const;
     int generateAccountNumber() const;
