@@ -25,7 +25,7 @@ void BankAccount::deposit(int amount)
         return;
     };
 
-    amount += amount;
+    balance += amount;
 }
 
 // Uttag (går ej att dra ut mindre än 0 och ej mer än vad man har - saldo minskar vid insättning)
@@ -43,7 +43,7 @@ void BankAccount::withdraw(int amount)
         return;
     };
 
-    amount -= balance;
+    balance -= amount;
 }
 
 // Saldo
