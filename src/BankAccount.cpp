@@ -13,7 +13,7 @@ withdraw(int amount)
 getBalance()
 */
 
-BankAccount::BankAccount(int accountNumber, int balance = 0) : accountNumber(accountNumber), balance(balance) {};
+BankAccount::BankAccount(int accountNumber, int balance) : accountNumber(accountNumber), balance(balance) {};
 
 // Insättning (går ej att sätta in <0 - saldo ökar vi insättning)
 void BankAccount::deposit(int amount)
