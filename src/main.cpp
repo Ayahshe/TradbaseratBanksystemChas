@@ -41,14 +41,18 @@ void Client(Bank& bank, int clientId) {
         std::this_thread::sleep_for(std::chrono::milliseconds(randTime));
         if (action == 0) { // Insättning
             // std::cout << "Customer " << clientId << " Transaction: Attempt. Depositing " << amount << " into " << accountNumber << std::endl;
-            printFromThread("Customer " + std::to_string(clientId) + " Transaction: Attempt. Depositing " + std::to_string(amount) + " into " + std::to_string(accountNumber));
+            printFromThread("\033[32;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Depositing " + std::to_string(amount) + " into " + std::to_string(accountNumber) + "\033[0m");
 
             bank.getAccount(accountNumber)->deposit(amount);
         } else { // Uttag
             // std::cout << "Customer " << clientId << " Transaction: Attempt. Withdrawing " << amount << " from " << accountNumber << std::endl;
-            printFromThread("Customer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber));
 
-            bank.getAccount(accountNumber)->withdraw(amount);
+            int result = bank.getAccount(accountNumber)->withdraw(amount);
+            if (result == 1) {
+                printFromThread("\033[33;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
+            } else {
+                printFromThread("\033[31;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
+            }
         }
     }
 }
