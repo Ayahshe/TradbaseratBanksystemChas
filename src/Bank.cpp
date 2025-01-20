@@ -15,7 +15,7 @@ Implementera metoder för att lägga till konton och hämta kontouppgifter
 
 Bank::Bank() {
     std::cout << "Välkommen till banken!/n";
-    std::cout << "Konto nummer: " << getAccountNumbers();
+    // std::cout << "Konto nummer: " << getAccountNumbers();
 } 
 
 void Bank::addAccount(const BankAccount& account)
