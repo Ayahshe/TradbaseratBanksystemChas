@@ -16,7 +16,7 @@ public:
     
     // Metoder
     void deposit(int amount);
-    void withdraw(int amount);
+    int withdraw(int amount);
     int getBalance();
     int getAccountNumber() const;
 };

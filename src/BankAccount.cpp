@@ -29,21 +29,23 @@ void BankAccount::deposit(int amount)
 }
 
 // Uttag (går ej att dra ut mindre än 0 och ej mer än vad man har - saldo minskar vid insättning)
-void BankAccount::withdraw(int amount)
+int BankAccount::withdraw(int amount)
 {
     std::lock_guard<std::mutex> lock(mtx);
 
     if (amount < 0) {
-        std::cout << "Attempting to withdraw less than 0 from " << accountNumber << std::endl;
-        return;
+        // std::cout << "Attempting to withdraw less than 0 from " << accountNumber << std::endl;
+        return 1;
     };
 
     if (amount > balance) {
-        std::cout << "Insufficient funds, trying to withdraw " << amount << " from " << accountNumber << " but only " << balance << " is available!" << std::endl;
-        return;
+        // std::cout << "Insufficient funds, trying to withdraw " << amount << " from " << accountNumber << " but only " << balance << " is available!" << std::endl;
+        return 1;
     };
 
     balance -= amount;
+
+    return 0;
 }
 
 // Saldo
