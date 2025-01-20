@@ -16,8 +16,7 @@ void Client(Bank& bank, int clientId) {
     for (int i = 0; i < 5; ++i) { // Varje kund gör 5 transaktioner
         int accountIndex = accountDist(gen);
         int amount = amountDist(gen);
-        // int action = actionDist(gen); // Väljer insättning eller uttag
-        int action = 0;
+        int action = actionDist(gen); // Väljer insättning eller uttag
 
         // Hämta kontonummer från banken
         auto accountNumbers = bank.getAccountNumbers();
