@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     
     // Skapa 5 konton med olika startbalanser
     for (int i = 0; i < 5; ++i) {
-        bank.addAccount(i * 100)
+        bank.addAccount(i * 100);
     }
 
     // Skapa 5 kunder med trådar
