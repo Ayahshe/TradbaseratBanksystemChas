@@ -22,22 +22,19 @@ void Bank::addAccount(const BankAccount& account)
 {
     std::cout << "Creating new bank account\nEnter account number and balance";
     // inserts new element & forwards => forwards arguments to constructor of element
-    // accounts.emplace(account);
-    accounts.emplace(account(generateAccountNumber()));
+
+    // Create a dynamically allocated BankAccount object
+    BankAccount* newAccount = new BankAccount(account.getAccountNumber(), 0);
+
+    // Insert the account pointer into the map
+    auto result = accounts.insert({account.getAccountNumber(), newAccount});
 }
 
-// Returns first account number found?
-int Bank::getAccountNumbers() const 
-{
-    for(const auto& account : accounts)
-    {
-        if(account.first)
-        {
-            return account.first;
-        } else {
-           std:: cout << "\033[1;31mINVALID ACCOUNT POINTER FOR " << account.first << "\033[0m\n";
-        }
+std::vector<int> Bank::getAccountNumbers() const {
+    std::vector<int> accountNumbers;
 
+    for(const auto& account : accounts) {
+        accountNumbers.push_back(account.first);
     }
 
 }
