@@ -15,14 +15,11 @@ Implementera metoder för att lägga till konton och hämta kontouppgifter
 
 Bank::Bank() {
     std::cout << "Welcome to the Bank!\n";
-    // std::cout << "Konto nummer: " << getAccountNumbers();
 }
 
 void Bank::addAccount(const BankAccount& account)
 {
 std::lock_guard<std::mutex> lock(accountsMutex);
-    std::cout << "Creating new bank account\nEnter account number and balance";
-    // inserts new element & forwards => forwards arguments to constructor of element
 
     // Create a dynamically allocated BankAccount object
     BankAccount* newAccount = new BankAccount(account.getAccountNumber(), 0);
