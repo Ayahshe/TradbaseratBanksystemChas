@@ -37,6 +37,7 @@ std::vector<int> Bank::getAccountNumbers() const {
         accountNumbers.push_back(account.first);
     }
 
+    return accountNumbers;
 }
 
 // Displays all accounst and their balances
