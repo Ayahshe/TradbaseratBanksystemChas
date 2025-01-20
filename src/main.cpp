@@ -16,7 +16,8 @@ void Client(Bank& bank, int clientId) {
     for (int i = 0; i < 5; ++i) { // Varje kund gör 5 transaktioner
         int accountIndex = accountDist(gen);
         int amount = amountDist(gen);
-        int action = actionDist(gen); // Väljer insättning eller uttag
+        // int action = actionDist(gen); // Väljer insättning eller uttag
+        int action = 0;
 
         // Hämta kontonummer från banken
         auto accountNumbers = bank.getAccountNumbers();
@@ -40,7 +41,7 @@ int main(int argc, char* argv[])
     
     // Skapa 5 konton med olika startbalanser
     for (int i = 0; i < 5; ++i) {
-        bank.addAccount(i * 100);
+        bank.addAccount(bank.generateAccountNumber());
     }
 
     // Skapa 5 kunder med trådar
