@@ -19,8 +19,8 @@ Bank::Bank() {
 } 
 
 void Bank::addAccount(const BankAccount& account)
-std::lock_guard<std::mutex> lock(accountsMutex); 
 {
+std::lock_guard<std::mutex> lock(accountsMutex);
     std::cout << "Creating new bank account\nEnter account number and balance";
     // inserts new element & forwards => forwards arguments to constructor of element
 
@@ -43,8 +43,8 @@ std::vector<int> Bank::getAccountNumbers() const {
 
 // Displays all accounst and their balances
 void Bank::getAccountBalances() const
-std::lock_guard<std::mutex> lock(accountsMutex);
 {
+std::lock_guard<std::mutex> lock(accountsMutex);
     for (const auto& [accountNumber, accPtr] : accounts) {
         if (accPtr) {
             std::cout << "\033[1;36m[" << accountNumber << "]\033[0m \033[1;32m= " << accPtr->getBalance() << "\033[0m" << std::endl;
