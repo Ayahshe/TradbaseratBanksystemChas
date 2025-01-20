@@ -3,11 +3,13 @@
 #include "BankAccount.h"
 #include <map>
 #include <random>
+#include <mutex>
 
 class Bank
 {
     private:
     std::map<int, BankAccount*> accounts;
+    mutable std::mutex accountsMutex;
 
     public:
     Bank(); 
