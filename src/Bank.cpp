@@ -83,3 +83,13 @@ int Bank::generateAccountNumber() const {
     return accountNumber;
 
 }
+
+BankAccount* Bank::getAccount(int accountNumber) {
+    auto it = accounts.find(accountNumber);
+
+    if (it != accounts.end()) {
+        return it->second;
+    } else {
+        return nullptr;
+    }
+}
