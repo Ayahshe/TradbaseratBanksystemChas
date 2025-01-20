@@ -21,7 +21,7 @@ void Client(Bank& bank, int clientId) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> accountDist(0, bank.getAccountNumbers().size() - 1); // doesn't work, since getAccountNumbers() just returns an int
-    std::uniform_int_distribution<> amountDist(1, 1); // Slumpmässigt belopp
+    std::uniform_int_distribution<> amountDist(1, 100); // Slumpmässigt belopp
     std::uniform_int_distribution<> actionDist(0, 1); // 0 för insättning, 1 för uttag så att det ser fint ut med slumpmässiga insättningar och uttag
     std::uniform_int_distribution<> randInterval(10, 50); // ms intervall mellan sina transaktioner
 
@@ -49,8 +49,10 @@ void Client(Bank& bank, int clientId) {
 
             int result = bank.getAccount(accountNumber)->withdraw(amount);
             if (result == 1) {
-                printFromThread("\033[33;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
+                // Inte tillräckligt med pengar på kontot
+                printFromThread("\033[33;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Insufficient balance " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
             } else {
+                // Pengar drogs från kontot
                 printFromThread("\033[31;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
             }
         }
