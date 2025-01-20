@@ -2,7 +2,15 @@
 #include <thread>
 #include <vector>
 #include <random>
+#include <mutex>
 #include "Bank.h"
+
+std::mutex coutMutex;
+
+void printFromThread(const std::string& message) {
+    std::lock_guard<std::mutex> lock(coutMutex);
+    std::cout << message << std::endl;
+}
 
 // Simulerar en kund som utför slumpmässiga transaktioner
 void Client(Bank& bank, int clientId) {
@@ -23,11 +31,15 @@ void Client(Bank& bank, int clientId) {
         int accountNumber = accountNumbers[accountIndex];
 
         if (action == 0) { // Insättning
+            // std::cout << "Customer " << clientId << " Transaction: Attempt. Depositing " << amount << " into " << accountNumber << std::endl;
+            printFromThread("Customer " + std::to_string(clientId) + " Transaction: Attempt. Depositing " + std::to_string(amount) + " into " + std::to_string(accountNumber));
+
             bank.getAccount(accountNumber)->deposit(amount);
-            std::cout << "Kund " << clientId << ": Sätter in " << amount << " på konto " << accountNumber << std::endl;
         } else { // Uttag
+            // std::cout << "Customer " << clientId << " Transaction: Attempt. Withdrawing " << amount << " from " << accountNumber << std::endl;
+            printFromThread("Customer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber));
+
             bank.getAccount(accountNumber)->withdraw(amount);
-            std::cout << "Kund " << clientId << ": Tar ut " << amount << " från konto " << accountNumber << std::endl;
         }
     }
 }
