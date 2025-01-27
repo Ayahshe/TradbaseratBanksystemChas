@@ -1,0 +1,134 @@
+{
+    "accountNumber": 53274654,
+    "amount": 53,
+    "balance": 0,
+    "timestamp": 1737973204,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 40612350,
+    "amount": 100,
+    "balance": 100,
+    "timestamp": 1737973204,
+    "type": "deposit"
+}
+{
+    "accountNumber": 53274654,
+    "amount": 76,
+    "balance": 76,
+    "timestamp": 1737973204,
+    "type": "deposit"
+}
+{
+    "accountNumber": 20701808,
+    "amount": 74,
+    "balance": 0,
+    "timestamp": 1737973204,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 18269107,
+    "amount": 73,
+    "balance": 0,
+    "timestamp": 1737973205,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 80570101,
+    "amount": 28,
+    "balance": 28,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 53274654,
+    "amount": 64,
+    "balance": 29,
+    "timestamp": 1737973205,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 40612350,
+    "amount": 16,
+    "balance": 116,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 18269107,
+    "amount": 57,
+    "balance": 0,
+    "timestamp": 1737973205,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 18269107,
+    "amount": 98,
+    "balance": 98,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 40612350,
+    "amount": 98,
+    "balance": 18,
+    "timestamp": 1737973205,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 80570101,
+    "amount": 32,
+    "balance": 60,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+
+{
+    "accountNumber": 18269107,
+    "amount": 53,
+    "balance": 45,
+    "timestamp": 1737973205,
+    "type": "withdraw"
+}
+{
+    "accountNumber": 80570101,
+    "amount": 64,
+    "balance": 124,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 53274654,
+    "amount": 84,
+    "balance": 142,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 80570101,
+    "amount": 29,
+    "balance": 153,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 20701808,
+    "amount": 14,
+    "balance": 14,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 40612350,
+    "amount": 54,
+    "balance": 72,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}
+{
+    "accountNumber": 40612350,
+    "amount": 93,
+    "balance": 165,
+    "timestamp": 1737973205,
+    "type": "deposit"
+}

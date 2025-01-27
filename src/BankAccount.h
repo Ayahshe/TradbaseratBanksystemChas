@@ -1,4 +1,7 @@
 #include <mutex>
+//#include <fstream>
+// #include "nlohmann/json.hpp"
+//#include <ctime>
 
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
@@ -19,6 +22,8 @@ public:
     int withdraw(int amount);
     int getBalance();
     int getAccountNumber() const;
+    /*void logTransaction(const std::string& type, int amount);*/
+
 };
 
 #endif //BANKACCOUNT_H

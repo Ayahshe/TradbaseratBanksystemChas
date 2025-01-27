@@ -2,6 +2,31 @@
 #include <iostream>
 #include <random>
 #include <map>
+/*#include <fstream>
+#include "nlohmann/json.hpp"
+#include <ctime>*/
+
+//using json = nlohmann::json;
+
+/* void BankAccount::logTransaction(const std::string& type, int amount) {
+    std::lock_guard<std::mutex> lock(mtx); // Trådsäker
+
+    json transaction = {
+        {"accountNumber", accountNumber},
+        {"type", type}, // deposit eller withdraw
+        {"amount", amount},
+        {"balance", balance}, // Nya saldot
+        {"timestamp", std::time(nullptr)}
+    };
+
+    std::ofstream file("transactions.json", std::ios::app);
+    if (file.is_open()) {
+        file << transaction.dump() << std::endl;
+        file.close();
+    } else {
+        std::cerr << "Failed to open transactions.json for logging." << std::endl;
+    }
+} */
 
 /*
 
@@ -26,6 +51,8 @@ void BankAccount::deposit(int amount)
     };
 
     balance += amount;
+    /*logTransaction("deposit", amount);
+    std::cout << "Logging transaction: " << " Amount: " << amount << " Balance: " << balance << std::endl;*/
 }
 
 // Uttag (går ej att dra ut mindre än 0 och ej mer än vad man har - saldo minskar vid insättning)
@@ -44,6 +71,8 @@ int BankAccount::withdraw(int amount)
     };
 
     balance -= amount;
+   /* logTransaction("withdraw", amount);
+    std::cout << "Logging transaction: " << " Amount: " << amount << " Balance: " << balance << std::endl;*/
 
     return 0;
 }

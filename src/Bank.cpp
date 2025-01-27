@@ -17,6 +17,15 @@ Bank::Bank() {
     std::cout << "Welcome to the Bank!\n";
 }
 
+void Bank::signalReportReady() {
+    {
+    std::lock_guard<std::mutex> lock(accountsMutex);
+    readyToReport = true;
+}
+    reportCondition.notify_one();
+}
+
+
 void Bank::addAccount(const BankAccount& account)
 {
 std::lock_guard<std::mutex> lock(accountsMutex);

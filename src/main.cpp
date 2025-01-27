@@ -2,12 +2,13 @@
 #include <thread>
 #include <vector>
 #include <random>
+#include "nlohmann/json.hpp"
+#include <fstream>
 #include <mutex>
-#include <string>
 #include <chrono>
 #include "Bank.h"
 
-// using namespace std::chrono_literals;
+
 std::mutex coutMutex;
 
 void printFromThread(const std::string& message) {
@@ -15,73 +16,94 @@ void printFromThread(const std::string& message) {
     std::cout << message << std::endl;
 }
 
-// Simulerar en kund som utför slumpmässiga transaktioner
+void logTransactionToJson(int accountNumber, const std::string& type, int amount, int balance) {
+    nlohmann::json transaction = {
+        {"accountNumber", accountNumber},
+        {"type", type},
+        {"amount", amount},
+        {"balance", balance},
+        {"timestamp", std::time(nullptr)}
+    };
+
+    std::ofstream file("transactions.json", std::ios::app);
+    if (file.is_open()) {
+        file << transaction.dump(4) << std::endl;
+    } else {
+        std::cerr << "Failed to open transactions.json for logging." << std::endl;
+    }
+
+    // Färger och stil för konsolutskrift
+    std::string color = (type == "deposit") ? "\033[32m" : "\033[31m"; // Grönt för deposit, rött för withdraw
+    std::string bold = "\033[1m";
+    std::string reset = "\033[0m";
+
+    // Skriv ut med färger och fetstil
+    std::cout << color
+              << "Transaction: "
+              << bold << "Account " << accountNumber << reset
+              << ", Type: " << type
+              << ", Amount: " << amount
+              << ", Balance: " << balance
+              << reset << std::endl;
+}
+
 void Client(Bank& bank, int clientId) {
-    // Skapa en slumpgenerator
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> accountDist(0, bank.getAccountNumbers().size() - 1); // doesn't work, since getAccountNumbers() just returns an int
-    std::uniform_int_distribution<> amountDist(1, 100); // Slumpmässigt belopp
-    std::uniform_int_distribution<> actionDist(0, 1); // 0 för insättning, 1 för uttag så att det ser fint ut med slumpmässiga insättningar och uttag
-    std::uniform_int_distribution<> randInterval(10, 50); // ms intervall mellan sina transaktioner
+    std::uniform_int_distribution<> accountDist(0, bank.getAccountNumbers().size() - 1);
+    std::uniform_int_distribution<> amountDist(1, 100);
+    std::uniform_int_distribution<> actionDist(0, 1);
+    std::uniform_int_distribution<> randInterval(10, 50);
 
-    for (int i = 0; i < 5; ++i) { // Varje kund gör 5 transaktioner
-        int accountIndex = accountDist(gen);
-        int amount = amountDist(gen);
-
-        int action = actionDist(gen); // Väljer insättning eller uttag
-        // int action = 0; // just for testing depositing
-
-        int randTime = randInterval(gen);
-
-        // Hämta kontonummer från banken
+    for (int i = 0; i < 5; ++i) {
         auto accountNumbers = bank.getAccountNumbers();
+        if (accountNumbers.empty()) {
+            continue;
+        }
+
+        int accountIndex = accountDist(gen);
         int accountNumber = accountNumbers[accountIndex];
+        int amount = amountDist(gen);
+        int action = actionDist(gen);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(randTime));
+        std::this_thread::sleep_for(std::chrono::milliseconds(randInterval(gen)));
+
+        auto* account = bank.getAccount(accountNumber);
+        if (!account) continue;
+
         if (action == 0) { // Insättning
-            // std::cout << "Customer " << clientId << " Transaction: Attempt. Depositing " << amount << " into " << accountNumber << std::endl;
-            printFromThread("\033[32;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Depositing " + std::to_string(amount) + " into " + std::to_string(accountNumber) + "\033[0m");
-
-            bank.getAccount(accountNumber)->deposit(amount);
+            account->deposit(amount);
+            logTransactionToJson(accountNumber, "deposit", amount, account->getBalance());
         } else { // Uttag
-            // std::cout << "Customer " << clientId << " Transaction: Attempt. Withdrawing " << amount << " from " << accountNumber << std::endl;
-
-            int result = bank.getAccount(accountNumber)->withdraw(amount);
-            if (result == 1) {
-                // Inte tillräckligt med pengar på kontot
-                printFromThread("\033[33;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Insufficient balance " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
-            } else {
-                // Pengar drogs från kontot
-                printFromThread("\033[31;1mCustomer " + std::to_string(clientId) + " Transaction: Attempt. Withdrawing " + std::to_string(amount) + " from " + std::to_string(accountNumber) + "\033[0m");
-            }
+            account->withdraw(amount);
+            logTransactionToJson(accountNumber, "withdraw", amount, account->getBalance());
         }
     }
 }
 
-
-int main(int argc, char* argv[])
-{
-
+int main() {
     Bank bank;
 
-    // Skapa 5 konton med olika startbalanser
+    // Skapa och lägg till 5 konton
     for (int i = 0; i < 5; ++i) {
-        bank.addAccount(bank.generateAccountNumber());
+        int accountNumber = bank.generateAccountNumber();
+        BankAccount account(accountNumber, 100 * (i + 1)); // Skapa BankAccount-objekt
+        bank.addAccount(account); // Lägg till kontot i banken
     }
 
-    // Skapa 5 kunder med trådar
+    // Starta klienttrådar
     std::vector<std::thread> clients;
-    for(int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i) {
         clients.emplace_back(Client, std::ref(bank), i);
     }
 
-    // Vänta på att alla trådar ska avslutas
-    for(auto& client : clients) {
+    // Vänta på att alla trådar avslutas
+    for (auto& client : clients) {
         client.join();
     }
 
-    // Printa
+    // Skriv ut saldon för alla konton
     bank.getAccountBalances();
+
     return 0;
 }

@@ -10,6 +10,8 @@ class Bank
     private:
     std::map<int, BankAccount*> accounts;
     mutable std::mutex accountsMutex;
+    std::condition_variable reportCondition;
+    bool readyToReport = false;
 
     public:
     Bank(); 
@@ -19,6 +21,8 @@ class Bank
     int getRandAccountNumber() const;
     int generateAccountNumber() const;
     BankAccount* getAccount(int accountNumber); // Hämta ett konto
+    void singalReportReady();
+    void generateReport();
 
 };
 
