@@ -5,6 +5,9 @@
         "mutex": "cpp",
         "map": "cpp",
         "atomic": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "condition_variable": "cpp",
+        "thread": "cpp",
+        "iostream": "cpp"
     }
 }

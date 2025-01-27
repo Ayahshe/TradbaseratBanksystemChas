@@ -8,7 +8,6 @@
 #include <chrono>
 #include "Bank.h"
 
-
 std::mutex coutMutex;
 
 void printFromThread(const std::string& message) {
@@ -101,6 +100,15 @@ int main() {
     for (auto& client : clients) {
         client.join();
     }
+
+    // Signalera att rapporten är redo
+    bank.signalReportReady();
+
+    std::thread reporter([&bank]() {
+        bank.generateReport();
+    });
+
+    reporter.join(); // Vänta på att rapporterings-tråden avslutas
 
     // Skriv ut saldon för alla konton
     bank.getAccountBalances();

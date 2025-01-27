@@ -6,34 +6,44 @@
 #include <ctime>
 #include <functional>
 
-/*
-
-Hantera flera konton i en std::map<int, BankAccount>
-Implementera metoder för att lägga till konton och hämta kontouppgifter
-
-*/
-
 Bank::Bank() {
     std::cout << "Welcome to the Bank!\n";
 }
 
 void Bank::signalReportReady() {
     {
-    std::lock_guard<std::mutex> lock(accountsMutex);
-    readyToReport = true;
-}
+        std::lock_guard<std::mutex> lock(accountsMutex); // Synkronisera åtkomst till flaggan
+        readyToReport = true;
+    }
     reportCondition.notify_one();
 }
 
+void Bank::generateReport() {
+    std::unique_lock<std::mutex> lock(accountsMutex);
 
-void Bank::addAccount(const BankAccount& account)
-{
-std::lock_guard<std::mutex> lock(accountsMutex);
+    // Vänta på att flaggan sätts till true
+    reportCondition.wait(lock, [this] { return readyToReport; });
 
-    // Create a dynamically allocated BankAccount object
+    // När signalen tas emot, skriv ut rapporten
+    std::cout << "Generating report:" << std::endl;
+    for (const auto& [accountNumber, account] : accounts) {
+        if (account) {
+            std::cout << "Account " << accountNumber 
+                      << ", Balance: " << account->getBalance() 
+                      << std::endl;
+        }
+    }
+
+    readyToReport = false; // Återställ flaggan
+}
+
+void Bank::addAccount(const BankAccount& account) {
+    std::lock_guard<std::mutex> lock(accountsMutex);
+
+    // Skapa ett dynamiskt allokerat BankAccount-objekt
     BankAccount* newAccount = new BankAccount(account.getAccountNumber(), 0);
 
-    // Insert the account pointer into the map
+    // Sätt in kontopointern i map:en
     auto result = accounts.insert({account.getAccountNumber(), newAccount});
 }
 
@@ -47,10 +57,8 @@ std::vector<int> Bank::getAccountNumbers() const {
     return accountNumbers;
 }
 
-// Displays all accounst and their balances
-void Bank::getAccountBalances() const
-{
-std::lock_guard<std::mutex> lock(accountsMutex);
+void Bank::getAccountBalances() const {
+    std::lock_guard<std::mutex> lock(accountsMutex);
     for (const auto& [accountNumber, accPtr] : accounts) {
         if (accPtr) {
             std::cout << "\033[1;36m[" << accountNumber << "]\033[0m \033[1;32m= " << accPtr->getBalance() << "\033[0m" << std::endl;
@@ -60,7 +68,6 @@ std::lock_guard<std::mutex> lock(accountsMutex);
     }
 }
 
-// Returns a random account number in the account map
 int Bank::getRandAccountNumber() const {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -74,12 +81,11 @@ int Bank::getRandAccountNumber() const {
 }
 
 int Bank::generateAccountNumber() const {
-
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(10000000, 99999999);
 
-    int accountNumber = dis(gen); // Tiosiffrig kontonummer
+    int accountNumber = dis(gen); // Tiosiffrigt kontonummer
 
     // Generera ett unikt nummer
     do {
@@ -87,7 +93,6 @@ int Bank::generateAccountNumber() const {
     } while (accounts.find(accountNumber) != accounts.end()); // Kontrollera om det redan finns
 
     return accountNumber;
-
 }
 
 BankAccount* Bank::getAccount(int accountNumber) {
