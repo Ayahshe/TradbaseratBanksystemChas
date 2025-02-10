@@ -85,7 +85,7 @@ int Bank::generateAccountNumber() const {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(10000000, 99999999);
 
-    int accountNumber = dis(gen); // Tiosiffrigt kontonummer
+    int accountNumber;
 
     // Generera ett unikt nummer
     do {
