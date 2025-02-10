@@ -10,7 +10,7 @@
 
 class Bank {
 private:
-    std::map<int, BankAccount*> accounts;
+    std::map<int, std::shared_ptr<BankAccount>> accounts;
     mutable std::mutex accountsMutex;  // Endast en deklaration
     std::condition_variable reportCondition;  // Endast en deklaration
     bool readyToReport = false;  // Endast en deklaration
@@ -22,7 +22,7 @@ public:
     void getAccountBalances() const;
     int getRandAccountNumber() const;
     int generateAccountNumber() const;
-    BankAccount* getAccount(int accountNumber);
+    std::shared_ptr<BankAccount> getAccount(int accountNumber);
     void signalReportReady();  // Rättstavad metod
     void generateReport();
 };

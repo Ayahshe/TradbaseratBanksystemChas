@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <functional>
+#include <memory>
 
 Bank::Bank() {
     std::cout << "Welcome to the Bank!\n";
@@ -41,7 +42,7 @@ void Bank::addAccount(const BankAccount& account) {
     std::lock_guard<std::mutex> lock(accountsMutex);
 
     // Skapa ett dynamiskt allokerat BankAccount-objekt
-    BankAccount* newAccount = new BankAccount(account.getAccountNumber(), 0);
+    std::shared_ptr<BankAccount> newAccount = std::make_shared<BankAccount>(account.getAccountNumber(), 0);
 
     // Sätt in kontopointern i map:en
     accounts.insert({account.getAccountNumber(), newAccount});
@@ -95,7 +96,7 @@ int Bank::generateAccountNumber() const {
     return accountNumber;
 }
 
-BankAccount* Bank::getAccount(int accountNumber) {
+std::shared_ptr<BankAccount> Bank::getAccount(int accountNumber) {
     auto it = accounts.find(accountNumber);
 
     if (it != accounts.end()) {

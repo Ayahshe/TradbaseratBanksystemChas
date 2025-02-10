@@ -67,7 +67,7 @@ void Client(Bank& bank, int clientId) {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(randInterval(gen)));
 
-        auto* account = bank.getAccount(accountNumber);
+        std::shared_ptr<BankAccount> account = bank.getAccount(accountNumber);
         if (!account) continue;
 
         if (action == 0) { // Insättning
