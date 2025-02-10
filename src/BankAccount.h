@@ -12,17 +12,16 @@ private:
     int balance; // Eventuellt float?
     std::mutex mtx;
     int generateAccountNumber() const;
-    
+
 public:
     // Konstruktor
     BankAccount(int accountNumber, int balance = 0);
-    
+
     // Metoder
     void deposit(int amount);
     int withdraw(int amount);
     int getBalance();
     int getAccountNumber() const;
-    /*void logTransaction(const std::string& type, int amount);*/
 
 };
 
