@@ -44,7 +44,7 @@ void Bank::addAccount(const BankAccount& account) {
     BankAccount* newAccount = new BankAccount(account.getAccountNumber(), 0);
 
     // Sätt in kontopointern i map:en
-    auto result = accounts.insert({account.getAccountNumber(), newAccount});
+    accounts.insert({account.getAccountNumber(), newAccount});
 }
 
 std::vector<int> Bank::getAccountNumbers() const {
